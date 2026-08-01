@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\TaskController;
+use App\Http\Controllers\Api\DashboardController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -22,6 +23,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('projects', ProjectController::class);
 
     Route::apiResource('projects.tasks', TaskController::class);
+
+    Route::get('/dashboard', DashboardController::class);
 
 
 });
