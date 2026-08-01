@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\ProjectStatus;
 
 return new class extends Migration
 {
@@ -19,11 +20,8 @@ return new class extends Migration
 
             $table->text('description')->nullable();
 
-            $table->enum('status', [
-                'active',
-                'completed',
-                'archived',
-            ])->default('active');
+            $table->enum('status', ProjectStatus::values())
+                    ->default(ProjectStatus::Active->value);
 
             $table->softDeletes();
 
