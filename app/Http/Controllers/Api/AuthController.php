@@ -9,9 +9,13 @@ use App\Http\Resources\UserResource;
 use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Traits\ApiResponse;
+
 
 class AuthController extends Controller
 {
+    use ApiResponse;
+
     public function __construct(
         private readonly AuthService $authService
     ) {
@@ -21,30 +25,35 @@ class AuthController extends Controller
     {
         $result = $this->authService->register($request->validated());
 
-        return response()->json([
-            'message' => 'User registered successfully.',
-            'token' => $result['token'],
-            'user' => new UserResource($result['user']),
-        ], 201);
+        return $this->success(
+            data: [
+                'token' => $result['token'],
+                'user' => new UserResource($result['user']),
+            ],
+            message: 'User registered successfully.',
+            status: 201
+        );
     }
 
     public function login(LoginRequest $request): JsonResponse
     {
         $result = $this->authService->login($request->validated());
 
-        return response()->json([
-            'message' => 'Login successful.',
-            'token' => $result['token'],
-            'user' => new UserResource($result['user']),
-        ]);
+        return $this->success(
+            data: [
+                'token' => $result['token'],
+                'user' => new UserResource($result['user']),
+            ],
+            message: 'Login successful.'
+        );
     }
 
     public function logout(Request $request): JsonResponse
     {
         $this->authService->logout($request->user());
 
-        return response()->json([
-            'message' => 'Logged out successfully.',
-        ]);
+        return $this->success(
+            message: 'Logged out successfully.'
+        );
     }
 }
