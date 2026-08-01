@@ -16,8 +16,8 @@ class DashboardRepository implements DashboardRepositoryInterface
             ->where('user_id', $userId)
             ->selectRaw(
                 '
-                COUNT(*) AS total_projects,
-                SUM(status = ?) AS active_projects
+                COUNT(*) as total_projects,
+                COALESCE(SUM(status = ?), 0) as active_projects
                 ',
                 [
                     ProjectStatus::Active->value,
@@ -31,22 +31,33 @@ class DashboardRepository implements DashboardRepositoryInterface
         ];
     }
 
-    public function getTaskStatistics(int $userId): array
+   public function getTaskStatistics(int $userId): array
     {
         $statistics = Task::query()
             ->join('projects', 'projects.id', '=', 'tasks.project_id')
+            ->whereNull('tasks.deleted_at')
+            ->whereNull('projects.deleted_at')
             ->where('projects.user_id', $userId)
             ->selectRaw(
                 '
                 COUNT(*) AS total_tasks,
 
-                SUM(tasks.status = ?) AS completed_tasks,
+                COALESCE(
+                    SUM(tasks.status = ?),
+                    0
+                ) AS completed_tasks,
 
-                SUM(tasks.status <> ?) AS pending_tasks,
+                COALESCE(
+                    SUM(tasks.status <> ?),
+                    0
+                ) AS pending_tasks,
 
-                SUM(
-                    tasks.status <> ?
-                    AND tasks.due_date < CURDATE()
+                COALESCE(
+                    SUM(
+                        tasks.status <> ?
+                        AND tasks.due_date < CURDATE()
+                    ),
+                    0
                 ) AS overdue_tasks
                 ',
                 [

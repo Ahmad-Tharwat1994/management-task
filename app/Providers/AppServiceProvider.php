@@ -9,6 +9,8 @@ use App\Repositories\Eloquent\ProjectRepository;
 use App\Repositories\Interfaces\ProjectRepositoryInterface;
 use App\Repositories\Eloquent\TaskRepository;
 use App\Repositories\Interfaces\TaskRepositoryInterface;
+use App\Repositories\Eloquent\DashboardRepository;
+use App\Repositories\Interfaces\DashboardRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,7 +23,12 @@ class AppServiceProvider extends ServiceProvider
             TaskRepositoryInterface::class,
             TaskRepository::class
         );
-        
+
+        $this->app->bind(
+            DashboardRepositoryInterface::class,
+            DashboardRepository::class
+        );
+
         $this->app->bind(
         ProjectRepositoryInterface::class,
         ProjectRepository::class
