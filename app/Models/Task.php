@@ -2,42 +2,38 @@
 
 namespace App\Models;
 
+use App\Enums\TaskPriority;
+use App\Enums\TaskStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Enums\ProjectStatus;
 
-class Project extends Model
+class Task extends Model
 {
     use HasFactory;
     use SoftDeletes;
 
     protected $fillable = [
-        'user_id',
-        'name',
+        'project_id',
+        'title',
         'description',
+        'priority',
         'status',
+        'due_date',
     ];
 
     protected function casts(): array
     {
         return [
-            'status' => ProjectStatus::class,
+            'priority' => TaskPriority::class,
+            'status' => TaskStatus::class,
+            'due_date' => 'date',
         ];
     }
 
-    public function user(): BelongsTo
+    public function project(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Project::class);
     }
-
-    public function tasks(): HasMany
-    {
-        return $this->hasMany(Task::class);
-    }
-
-
-
 }
