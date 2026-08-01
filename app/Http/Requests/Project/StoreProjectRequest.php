@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Http\Requests\Project\Concerns\HasProjectRules;
+use App\Http\Requests\Concerns\HasProjectRules;
 
 
 class StoreProjectRequest extends FormRequest

@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Requests\Project\Concerns;
+namespace App\Http\Requests\Concerns;
 
 use App\Enums\ProjectStatus;
 use Illuminate\Validation\Rules\Enum;
