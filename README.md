@@ -40,7 +40,7 @@ git clone git@github.com:Ahmad-Tharwat1994/management-task.git
 Go to the project directory
 
 ```bash
-cd task-management-api
+cd management-task
 ```
 
 Install dependencies
